@@ -1,7 +1,7 @@
-# Farm-to-Market Platform - Product Requirements Document
+# Farm2Fork Platform - Product Requirements Document
 
 ## Product Overview
-A mobile-first platform connecting farmers directly with buyers, focusing on perishable goods with integrated logistics support. The platform aims to reduce wastage, improve price transparency, and create efficient supply chains.
+Farm2Fork is a mobile-first platform connecting farmers directly with buyers, focusing on perishable goods with integrated logistics support. The platform aims to reduce wastage, improve price transparency, and create efficient supply chains.
 
 ## Target Users
 
@@ -25,240 +25,253 @@ A mobile-first platform connecting farmers directly with buyers, focusing on per
 - Platform Administrators
 - Customer Support Staff
 
-## Core Requirements
+## Technical Documentation
+For detailed technical specifications, refer to:
+- [Database Schema](docs/schema.md) - Complete database structure and relationships
+- [API Documentation](docs/api_docs.md) - Detailed API endpoints and their purposes
 
-### 1. User Management
-- Mobile number-based registration with OTP (delivery under 30 seconds)
-- Role-based access control with granular permissions
-- Multi-step KYC verification
-  * Basic: Phone + Email (required)
-  * Business: GST + PAN (required for buyers)
-  * Enhanced: Address + Bank Account (required for transactions)
-- Profile completion requirements:
-  * Farmers: 90% before listing products
-  * Buyers: 85% before placing orders
-- Location tracking with accuracy within 100 meters
+## Core Features by Phase
 
-### 2. Market Price Integration
-- Government APMC Price Integration
-  * Automated daily price collection from government portals
-  * Support for multiple states' APMC portals
-  * Data normalization and validation
-  * Price history maintenance (minimum 1 year)
-  * Error handling and retry mechanisms
-  * Manual override capability for admin
+### Phase 1: Foundation (4 weeks)
+**Goal**: Establish core infrastructure and market price integration
 
-- Price Analysis Tools
-  * APMC yard mapping within 200km radius
-  * Price comparison across nearby APMC yards
-  * Historical price trends (daily, weekly, monthly views)
-  * Seasonal price pattern analysis
-  * Price alerts based on user-defined thresholds
-  * Export functionality for price reports
+#### Market Price Integration
+- Daily APMC price collection
+- Price normalization and validation
+- Historical price tracking
+- Price trend analysis
+- API endpoints for price data
 
-- Farmer Decision Support
-  * Current vs historical price comparison
-  * Nearest APMC yard prices
-  * Price forecasting based on historical data
-  * Best time to sell recommendations
-  * Price movement alerts
-  * Seasonal price pattern insights
+**Success Metrics**:
+- Price data accuracy > 99%
+- Update frequency: Daily
+- API response time < 500ms
+- Data validation time < 1 minute
 
-### 3. Product Management
-- Hierarchical category management (up to 4 levels deep)
-- Comprehensive product attributes
-  * Physical attributes (size, color, variety)
-  * Quality parameters (grade, freshness)
-  * Storage requirements (temperature, humidity)
-- Real-time inventory updates (< 1 minute lag)
-- Quality grading system (A, B, C grades)
-- Image requirements:
-  * Minimum 3 images per product
-  * Resolution: 1024x1024 minimum
-  * Size: < 5MB per image
-- Expiry tracking with automated alerts
-- Batch management with traceability
-- Price comparison with APMC data
-  * Side-by-side comparison with market prices
-  * Percentage difference highlighting
-  * Historical price charts
-  * Price trend indicators
+### Phase 2: User Interface (6 weeks)
+**Goal**: Create intuitive interfaces for price discovery and basic operations
 
-### 4. Order Management
-- Real-time order placement and tracking
-- Minimum order values by buyer type
-- Quantity-based pricing tiers
-- Order modification window: 15 minutes
-- Cancellation with reason tracking
-- Quality verification at:
-  * Pickup (mandatory)
-  * Delivery (mandatory for orders > ₹50,000)
-- Order fulfillment SLA:
-  * Acceptance: 30 minutes
-  * Pickup: 4 hours
-  * Delivery: 24 hours
+#### Web Application
+- Market price visualization
+- Price comparison tools
+- Basic user registration
+- Simple search functionality
 
-### 5. Logistics
-- Integrated delivery partner system
-- Real-time location tracking
-- Route optimization for multiple pickups
-- Delivery time estimation (±30 minutes accuracy)
-- Temperature monitoring for cold chain
-- Proof of delivery system
-  * Photo documentation
-  * OTP verification
-  * Digital signature
-- Maximum delivery radius: 200km
+#### Mobile Application
+- Price checking features
+- Offline capability
+- Basic user profiles
+- Location-based services
 
-### 6. Payments
-- Multiple payment methods:
-  * UPI (preferred)
-  * Razorpay integration
-  * Bank transfer
-- Payment terms:
-  * Advance payment (default)
-  * Credit terms (for verified buyers)
-  * Pay on delivery (selected buyers)
-- Settlement timelines:
-  * T+1 for UPI transactions
-  * T+3 for other methods
-- Automated reconciliation
-- GST compliance
-- Invoice generation
+**Success Metrics**:
+- Page load time < 2s
+- Mobile app size < 50MB
+- Offline functionality coverage > 80%
+- User engagement > 5 minutes/session
 
-### 7. Quality Management
-- Quality parameters by product type
-- Standardized inspection checklist
-- Photo documentation requirements
-- Quality dispute resolution
-  * Response time: 2 hours
-  * Resolution time: 24 hours
-- Rating system (1-5 stars)
-- Quality certification tracking
+### Phase 3: User Management (4 weeks)
+**Goal**: Implement comprehensive user authentication and authorization
 
-### 8. Market Intelligence
-- Daily price updates from government APIs
-- Historical price tracking (6 months)
-- Demand forecasting
-- Price alerts
-- Market insights dashboard
-- Competitor price tracking
-
-## Technical Requirements
-
-### 1. Performance
-- API response time:
-  * P95 < 500ms
-  * P99 < 1000ms
-- Image load time < 2s
-- Real-time updates < 1s
-- Concurrent users: 100,000
-- Transaction processing: 1000 TPS
-- Uptime: 99.9%
-- Price Crawler Performance:
-  * Maximum fetch time: 5 minutes per source
-  * Update frequency: Every 6 hours
-  * Data validation: < 1 minute
-  * Price alert processing: < 5 minutes
-  * Maximum data lag: 1 hour
-
-### 2. Security
-- End-to-end encryption
-- Secure payment handling (PCI DSS compliance)
+#### Features
+- Multi-step registration
 - Role-based access control
-- Data backup: Every 6 hours
-- Retention policy: 3 years
-- Regular security audits
+- OTP verification
+- Session management
+- Security protocols
 
-### 3. Scalability
-- Horizontal scaling support
-- Multi-region deployment ready
-- Caching implementation
-- Load balancing
-- Database sharding support
-- Auto-scaling triggers at 70% resource utilization
-- Price Data Management:
-  * Support for 1000+ APMC yards
-  * Daily price points: 100,000+
-  * Historical data: 3+ years
-  * Concurrent price queries: 1000/second
+**Success Metrics**:
+- Registration completion rate > 90%
+- Authentication success rate > 99%
+- Session management reliability > 99.9%
+- Security compliance score > 95%
 
-### 4. Technology Stack (Initial Phases)
-- Database: PostgreSQL 15+ with extensions
-  * pg_trgm for fuzzy search
-  * tsearch2 for full-text search
-  * postgis for location queries
-  * timescaledb for time-series data
-- Caching: Redis 7+
-- Task Queue: Celery
-- Search: PostgreSQL-based
-- Storage: AWS S3
-- CDN: CloudFront
+### Phase 4: Profile Management (3 weeks)
+**Goal**: Enable detailed user profiles and verification
 
-## Phase-wise Deliverables
+#### Features
+- Profile types (Farmer, Buyer, Inspector, Delivery)
+- KYC verification system
+- Document management
+- Location management
+- Profile completion tracking
 
-### Phase 1 (4 months)
-1. **Core Platform** (Weeks 1-6)
-   - User registration and KYC
-   - Basic product catalog
-   - Simple order management
-   - Manual logistics
-   - UPI payments
+**Success Metrics**:
+- Profile completion rate > 85%
+- KYC verification time < 24 hours
+- Document upload success > 99%
+- Location accuracy > 95%
 
-2. **Market Price Integration** (Weeks 7-8)
-   - APMC price crawler development
-   - Price comparison tools
-   - Historical data import
-   - Price alerts system
-   - Basic analytics
+### Phase 5: Product Catalog (4 weeks)
+**Goal**: Create comprehensive product management system
 
-3. **Essential Features** (Weeks 9-14)
-   - Inventory management
-   - Quality parameters
-   - Basic analytics
-   - Mobile app v1.0
-   - Payment integration
+#### Features
+- Category management
+- Product attributes
+- Quality parameters
+- Image management
+- Search and filtering
 
-4. **MVP Launch** (Weeks 15-16)
-   - Limited region testing
-   - Basic monitoring
-   - Essential reports
-   - User feedback system
+**Success Metrics**:
+- Product listing time < 5 minutes
+- Search accuracy > 90%
+- Image upload success > 99%
+- Category coverage > 95%
 
-### Phase 2 (5 months)
-1. **Platform Enhancement** (Months 1-2)
-   - Advanced inventory
-   - Dynamic pricing
-   - Quality workflow
-   - Performance optimization
+### Phase 6: Inventory Management (4 weeks)
+**Goal**: Implement robust inventory tracking system
 
-2. **Automation** (Months 3-4)
-   - Automated logistics
-   - Settlement system
-   - Analytics dashboard
-   - Mobile app v2.0
+#### Features
+- Stock management
+- Batch tracking
+- Price management
+- Quality grading
+- Inventory alerts
 
-3. **Regional Expansion** (Month 5)
-   - Multi-city operations
-   - Localization
-   - Enhanced monitoring
+**Success Metrics**:
+- Stock accuracy > 99%
+- Batch traceability 100%
+- Alert delivery time < 5 minutes
+- Data consistency > 99.9%
 
-### Phase 3 (6 months)
-1. **Advanced Features** (Months 1-3)
-   - AI/ML integration
-   - Predictive analytics
-   - Advanced logistics
-   - Mobile app v3.0
+### Phase 7: Warehouse Management (3 weeks)
+**Goal**: Enable efficient storage and handling
 
-2. **Scale & Optimize** (Months 4-6)
-   - Performance tuning
-   - Multi-region support
-   - Enhanced security
-   - Business intelligence
+#### Features
+- Warehouse profiles
+- Storage management
+- Space utilization
+- Condition monitoring
+- Operations workflow
 
-## Success Metrics
+**Success Metrics**:
+- Space utilization > 85%
+- Temperature monitoring accuracy > 99%
+- Operation efficiency > 90%
+- Integration success rate > 99%
 
-### 1. Business Metrics
+### Phase 8: Order Management (5 weeks)
+**Goal**: Streamline order processing and tracking
+
+#### Features
+- Order creation
+- Status management
+- Modification system
+- Cancellation handling
+- Order tracking
+
+**Success Metrics**:
+- Order processing time < 30 minutes
+- Status update accuracy > 99%
+- Cancellation handling time < 1 hour
+- Tracking accuracy > 95%
+
+### Phase 9: Logistics Management (4 weeks)
+**Goal**: Optimize delivery operations
+
+#### Features
+- Delivery partner system
+- Route optimization
+- Real-time tracking
+- Proof of delivery
+- Distance calculation
+
+**Success Metrics**:
+- Delivery time accuracy > 90%
+- Route optimization savings > 15%
+- Tracking update frequency < 5 minutes
+- Delivery success rate > 95%
+
+### Phase 10: Quality Management (3 weeks)
+**Goal**: Ensure product quality standards
+
+#### Features
+- Quality parameters
+- Inspection workflow
+- Grading system
+- Issue tracking
+- Resolution management
+
+**Success Metrics**:
+- Inspection completion rate > 95%
+- Quality dispute resolution < 24 hours
+- Grading accuracy > 95%
+- Issue tracking coverage 100%
+
+## Future Phases
+
+### Phase 11: Advanced Features
+- Payment integration
+- Notification system
+- Analytics dashboard
+- Performance optimization
+
+### Phase 12: AI/ML Features
+- Demand forecasting
+- Price prediction
+- Quality assessment
+- Route optimization
+
+### Phase 13: Infrastructure
+- Docker implementation
+- CI/CD pipeline
+- Monitoring system
+- Security hardening
+
+## Technical Stack
+### Core Technologies
+- Backend: Python with FastAPI
+- Database: PostgreSQL 15+
+- Frontend: React.js with TypeScript
+- Mobile: React Native
+- State Management: Redux
+- UI Components: Material UI
+
+### Future Technologies
+- Redis for caching
+- Celery for task queue
+- Docker for containerization
+- AWS for cloud infrastructure
+- Elasticsearch for search
+- Machine Learning pipeline
+
+## Project Structure
+```
+farm2fork/
+├── backend/          # FastAPI backend
+├── frontend/         # React.js web app
+├── mobile/          # React Native mobile app
+├── docs/            # Documentation
+└── scripts/         # Utility scripts
+```
+
+## Development Setup
+```bash
+# Backend Setup
+python -m venv venv
+source venv/bin/activate
+pip install -r requirements.txt
+alembic upgrade head
+
+# Frontend Setup
+cd frontend
+npm install
+npm start
+
+# Mobile Setup
+cd mobile
+npm install
+npm start
+```
+
+## Environment Variables
+```env
+DATABASE_URL=postgresql://user:password@localhost:5432/farm2fork
+JWT_SECRET=your-secret-key
+API_KEY=your-api-key
+```
+
+## Success Metrics Overview
+### Business Metrics
 - Monthly Active Users (MAU):
   * Farmers: 10,000 by month 6
   * Buyers: 5,000 by month 6
@@ -269,14 +282,8 @@ A mobile-first platform connecting farmers directly with buyers, focusing on per
   * Completion rate: > 90%
   * Cancellation rate: < 5%
   * Return rate: < 2%
-- Price Integration Metrics:
-  * Data accuracy: > 99%
-  * Price update frequency: Every 6 hours
-  * APMC yard coverage: > 90%
-  * Price alert delivery: < 5 minutes
-  * User price check frequency: 3x/week/user
 
-### 2. Technical Metrics
+### Technical Metrics
 - Platform Performance:
   * Uptime: 99.9%
   * API response: P95 < 500ms
@@ -286,18 +293,6 @@ A mobile-first platform connecting farmers directly with buyers, focusing on per
   * Session duration: > 5 minutes
   * Features used per session: > 3
 
-## Constraints & Limitations
-- Internet connectivity in rural areas
-- Cold storage availability
-- Last-mile delivery challenges
-- Payment settlement cycles
-- Perishable goods handling (max 48 hours)
-- Quality standardization
-- Market price volatility
-- Seasonal variations
-- Language barriers
-- Digital literacy
-
 ## Risk Mitigation
 - Offline mode support
 - Backup delivery partners
@@ -306,4 +301,10 @@ A mobile-first platform connecting farmers directly with buyers, focusing on per
 - Real-time monitoring
 - Dispute resolution system
 - Regular backup testing
-- Security audits 
+- Security audits
+
+## Contributing
+(Contribution guidelines will be added)
+
+## License
+(License information will be added) 
